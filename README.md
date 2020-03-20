@@ -119,13 +119,86 @@ bitcoin-cli -datadir=1  generate 100
   "71d56b7f67d6b490e5f7cfa5f5be592eb3b238780aabafd1b7c26bca94c68cbc",
   ...
 ```
-
-
+现在看一下钱包的状态，命令和操作如下所示：  
 ```
+tester@0bfc5154a423 ~/bitcoin-testnet-box$ bitcoin-cli -datadir=1 getwalletinfo
+{
+  "walletname": "",
+  "walletversion": 169900,
+  "balance": 0.00000000,
+  "unconfirmed_balance": 0.00000000,
+  "immature_balance": 5000.00000000,
+  "txcount": 100,
+  "keypoololdest": 1584693069,
+  "keypoolsize": 999,
+  "keypoolsize_hd_internal": 1000,
+  "paytxfee": 0.00000000,
+  "hdseedid": "ec239a39720337ffccac5818d15d37576943ee96",
+  "hdmasterkeyid": "ec239a39720337ffccac5818d15d37576943ee96",
+  "private_keys_enabled": true
+}
 ```
+可以看出这个钱包中还没有金钱，因为测试网中挖块的奖励费需要等100个区块深度以后才可以进入钱包  
+继续生成200个区块，再看结果：  
 ```
+tester@0bfc5154a423 ~/bitcoin-testnet-box$ bitcoin-cli -datadir=1 getwalletinfo
+{
+  "walletname": "",
+  "walletversion": 169900,
+  "balance": 8725.00000000,
+  "unconfirmed_balance": 0.00000000,
+  "immature_balance": 2487.50000000,
+  "txcount": 300,
+  "keypoololdest": 1584693069,
+  "keypoolsize": 999,
+  "keypoolsize_hd_internal": 1000,
+  "paytxfee": 0.00000000,
+  "hdseedid": "ec239a39720337ffccac5818d15d37576943ee96",
+  "hdmasterkeyid": "ec239a39720337ffccac5818d15d37576943ee96",
+  "private_keys_enabled": true
+}
 ```
+之后将地址一中10个比特币转给地址二，命令和结果如下所示：  
 ```
+tester@0bfc5154a423 ~/bitcoin-testnet-box$ bitcoin-cli -datadir=1 sendtoaddress 2NB71PgMkmebtDCoV5ysBWNEWVdJGm1xeBs 10
+19fd1c218a3774de3eb4250e85b2f784ec6c63ecbfddf07a138d2af62ffdf6e7
 ```
+再次查询地址二钱包中的比特币数量：  
 ```
-
+tester@0bfc5154a423 ~/bitcoin-testnet-box$ bitcoin-cli -datadir=2 getwalletinfo
+{
+  "walletname": "",
+  "walletversion": 169900,
+  "balance": 0.00000000,
+  "unconfirmed_balance": 10.00000000,
+  "immature_balance": 0.00000000,
+  "txcount": 1,
+  "keypoololdest": 1584693069,
+  "keypoolsize": 999,
+  "keypoolsize_hd_internal": 1000,
+  "paytxfee": 0.00000000,
+  "hdseedid": "62199f8834dd279cc2e9b263a20f8dac3f78a37a",
+  "hdmasterkeyid": "62199f8834dd279cc2e9b263a20f8dac3f78a37a",
+  "private_keys_enabled": true
+}
+```
+可以看出未认证的余额有10个比特币，我们需要在生成区块对这笔交易进行认证  
+所以继续生成10个比特币，再次观察钱包，可以看出10个比特币已经进入余额中。  
+```
+tester@0bfc5154a423 ~/bitcoin-testnet-box$ bitcoin-cli -datadir=2 getwalletinfo
+{
+  "walletname": "",
+  "walletversion": 169900,
+  "balance": 10.00000000,
+  "unconfirmed_balance": 0.00000000,
+  "immature_balance": 0.00000000,
+  "txcount": 1,
+  "keypoololdest": 1584693069,
+  "keypoolsize": 999,
+  "keypoolsize_hd_internal": 1000,
+  "paytxfee": 0.00000000,
+  "hdseedid": "62199f8834dd279cc2e9b263a20f8dac3f78a37a",
+  "hdmasterkeyid": "62199f8834dd279cc2e9b263a20f8dac3f78a37a",
+  "private_keys_enabled": true
+}
+```
