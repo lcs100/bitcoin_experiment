@@ -1,8 +1,11 @@
 # bitcoin_experiment_based_Docker
-## before start
+## Before start
 本教程基于Ubuntu16.04，而非windows  
 建议用户使用双系统或者虚拟机安装Ubuntu16.04(或18.04)  
 本教程将介绍比特币测试网的搭建以及测试网的使用  
+
+该实验基于Docker，Docker官方仓库中存在一个比特币测试网的镜像，这个镜像的优势在于可以下载到本地进行使用  
+可以让比特币初学者体会地址、交易、以及转账之间的关系  
 
 ## Prerequisites
 1、Docker  
@@ -42,9 +45,16 @@ Bitcoin server starting
 ```
 $ make getinfo
 ```
-结果如下所示，可以看到输出的信息是以类似于json格式表示的，其中展现了：  
-当前比特币版本号、协议版本号、钱包版本号  
-余额、区块数量、连接数、代理、当前挖矿难度值等  
+结果如下所示，可以看到输出的信息是以类似于json格式表示的，其中包括有：  
+当前比特币版本号(version)  
+协议版本号(protocolversion)  
+钱包版本号(walletversion)  
+余额(balance)  
+区块数量(blocks)  
+时间偏移量(timeoffset)  
+连接数(connections)  
+代理(proxy)  
+当前挖矿难度值(difficulty)等  
 ```
 bitcoin-cli -datadir=1  -getinfo
 {
@@ -85,11 +95,11 @@ bitcoin-cli -datadir=2  -getinfo
 ```
 
 ## creat address and block data
-输入如下命令：  
+输入如下命令，生成账户一的一个地址：  
 ```
 $ bitcoin-cli -datadir=1 getnewaddress
 ```
-可以得到一个字符串，即比特币地址  
+可以得到一个字符串，如下所示，这是唯一的：     
 ```
 2NBhfVG1QrMMEdKP77Hq9fj5YJBtb3cq7T3
 ```
@@ -97,18 +107,18 @@ $ bitcoin-cli -datadir=1 getnewaddress
 ```
 $ bitcoin-cli -datadir=2 getnewaddress
 ```
-得到第二个地址：  
+得到账户二的一个地址：  
 ```
 2NB71PgMkmebtDCoV5ysBWNEWVdJGm1xeBs
 ```
-之后是查看每个地址的私钥，操作和结果如下所示：  
+之后可以查看每个地址的私钥，操作和结果如下所示：  
 ```
 tester@0bfc5154a423 ~/bitcoin-testnet-box$ bitcoin-cli -datadir=1 dumpprivkey 2NBhfVG1QrMMEdKP77Hq9fj5YJBtb3cq7T3
 cT42ZMFsF4T2KjNSe4rmBiXjaPMugJB1TNd8XqCpopMF8JSfnyos
 tester@0bfc5154a423 ~/bitcoin-testnet-box$ bitcoin-cli -datadir=2 dumpprivkey 2NB71PgMkmebtDCoV5ysBWNEWVdJGm1xeBs
 cNxWZoWMYN2PRRLA4Db48XFnnW9yMQcskaRizdnWp2qg8tqQ2zg3
 ```
-接下来是创建区块，命令如下，其中100是可以自改动的  
+接下来是创建区块，命令如下，其中100是可以自己修改的  
 ```
 $ make generate BLOCKS=100
 ```
@@ -138,7 +148,7 @@ tester@0bfc5154a423 ~/bitcoin-testnet-box$ bitcoin-cli -datadir=1 getwalletinfo
   "private_keys_enabled": true
 }
 ```
-可以看出这个钱包中还没有金钱，因为测试网中挖块的奖励费需要等100个区块深度以后才可以进入钱包  
+可以看出这个钱包中还没有金钱，因为测试网中挖块的奖励费需要等10个区块确认以后才可以进入钱包  
 继续生成200个区块，再看结果：  
 ```
 tester@0bfc5154a423 ~/bitcoin-testnet-box$ bitcoin-cli -datadir=1 getwalletinfo
@@ -158,7 +168,8 @@ tester@0bfc5154a423 ~/bitcoin-testnet-box$ bitcoin-cli -datadir=1 getwalletinfo
   "private_keys_enabled": true
 }
 ```
-之后将地址一中10个比特币转给地址二，命令和结果如下所示：  
+可以看到这里的balance已经成功收到了比特币。  
+之后将地址一中10个比特币转给地址二，这其实是一笔交易，命令和结果如下所示：  
 ```
 tester@0bfc5154a423 ~/bitcoin-testnet-box$ bitcoin-cli -datadir=1 sendtoaddress 2NB71PgMkmebtDCoV5ysBWNEWVdJGm1xeBs 10
 19fd1c218a3774de3eb4250e85b2f784ec6c63ecbfddf07a138d2af62ffdf6e7
@@ -202,3 +213,8 @@ tester@0bfc5154a423 ~/bitcoin-testnet-box$ bitcoin-cli -datadir=2 getwalletinfo
   "private_keys_enabled": true
 }
 ```
+
+## Other
+1、
+
+
