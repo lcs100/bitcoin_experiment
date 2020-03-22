@@ -8,7 +8,8 @@
 可以让比特币初学者体会地址、交易、以及转账之间的关系  
 
 ## Prerequisites
-1、Docker  
+1、Docker
+
 参考网址:[click here](https://www.runoob.com/docker/ubuntu-docker-install.html)  
 
 2、make  
@@ -94,7 +95,7 @@ bitcoin-cli -datadir=2  -getinfo
 }
 ```
 
-## creat address and block data
+## Create address and block data
 输入如下命令，生成账户一的一个地址：  
 ```
 $ bitcoin-cli -datadir=1 getnewaddress
@@ -215,6 +216,6 @@ tester@0bfc5154a423 ~/bitcoin-testnet-box$ bitcoin-cli -datadir=2 getwalletinfo
 ```
 
 ## Other
-1、
-
+1、实时查看比特币最新的区块、数据以及其他资料[click here](https://www.blockchain.com/explorer)
+2、如果想搭建真实网络中比特币节点，可以阅读另外一篇教程[click here](https://github.com/lcs100/bitcoin_experiment/blob/master/based_realnet.md)
 
