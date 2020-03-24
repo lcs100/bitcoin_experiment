@@ -147,6 +147,74 @@ rpcpassword=CHANGE_THIS
 ```
 
 配置完文件后就可以开始运行了  
+第一个命令是查看程序运行时的输出：  
+```
+$ bitcoind -printtoconsole
+```
+第二个命令是如果想把比特币程序放在后台程序运行：  
+```
+$ bitcoind -daemon
+```
+第三个命令是监视比特币的进度和运行状态：  
+```
+$ bitcoin-cli getinfo
+```
+
+## Bitcoin Core Application API
+下面是针对比特币核心客户端进行说明。核心客户端实现了JSON-RPC接口，该接口可以使用命令行帮助程序
+bitcoin-cli访问。
+第一个命令是查看可用的比特币RPC命令列表：  
+```
+$ bitcoin-cli help
+```
+### 获得比特币核心客户端状态信息
+```
+$ bitcoin-cli getinfo
+```
+这个命令显示关于比特币网络节点、钱包、区块链数据状态的基础信息。结果如下所示：  
+```
+$ bitcoin-cli getinfo 
+{
+    "version" : 110200,
+    "protocolversion" : 70002,
+    "blocks" : 396367,
+    "timeoffset" : 0,
+    "connections" : 15,
+    "proxy" : "",
+    "difficulty" : 120033340651.23696899,
+    "testnet" : false,
+    "relayfee" : 0.00010000,
+    "errors" : "" 
+}
+```
+再返回的数据中可以看到:  
+比特币软件客户端版本号(version)  
+比特币协议版本号(protocolversoin)  
+区块链高度(blocks)  
+等  
+
+### 找交易并解码
+命令如下：  
+```
+$ bitcoin-cli getrawtransaction 0627052b6f28912f2703066a912ea577f2ce4da4caa5a5fbd8a57286c345c2f2
+```
+将返回的结果进行解码，命令如下：  
+```
+$ bitcoin-cli bitcoin-cli decoderawtransaction 0100000001186f9f998a5aa6f048e51dd8419a14d8a0f1a8a2836dd734d2804fe65fa35779000000008b483045022100884d142d86652a3f47ba4746ec719bbfbd040a570b1deccbb6498c75c4ae24cb02204b9f039ff08df09cbe9f6addac960298cad530a863ea8f53982c09db8f6e381301410484ecc0d46f1918b30928fa0e4ed99f16a0fb4fde0735e7ade8416ab9fe423cc5412336376789d172787ec3457eee41c04f4938de5cc17b4a10fa336a8d752adfffffffff0260e31600000000001976a914ab68025513c3dbd2f7b92a94e0581f5d50f654e788acd0ef8000000000001976a9147f9b1a7fb68d60c536c2fd8aeaa53a8f3cc025a888ac00000000
+```
+执行这个命令后就可以看到具体的交易的组成部分  
+
+### 探究区块
+命令如下：  
+```
+$ bitcoin-cli getblockhash 277316
+```
+和
+```
+$ bitcoin-cli getblock 0000000000000001b6b9a13b095e96db41c4a928b97ef2d944a9b31b2cc7bdc4
+```
+
+## .bitcoin目录分析
 
 
 
@@ -154,4 +222,5 @@ rpcpassword=CHANGE_THIS
 
 
 
-
+## Other
+如果想继续深入了解比特币的相关知识，那么需要继续深入学习
