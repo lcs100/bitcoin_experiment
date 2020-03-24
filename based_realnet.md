@@ -15,8 +15,10 @@ sudo apt-get install git
 sudo apt-get install make
 ```
 
-3、必须依赖： 
+3、必须依赖：
+
     Lib      | purpose | description
+    ----     | ------- | --------
     libboost | utility | library for threading, data structure
     libevent | networking | OS independent asynchronous networking
 4、可选依赖：   
