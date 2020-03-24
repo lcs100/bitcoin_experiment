@@ -16,19 +16,20 @@ sudo apt-get install make
 ```
 
 3、必须依赖：
- | Lib | purpose | description |
+ | Lib | Purpose | Description |
  | ---- | ------- | -------- |
  | libboost | utility | library for threading, data structure |
  | libevent | networking | OS independent asynchronous networking |
 
 4、可选依赖：   
-    miniupnpc
-    libdb4.8
-    qt
-    libqrencode
-    univalue
-    libzmq3
-
+ | Lib | Purpose | Description |
+ | --- | ------- | ----------- |
+ | miniupnpc | UPnP Support | Firewall-jumping support |
+ | libdb4.8 | Berkeley DB | Wallet storage (only needed when wallet enabled) |
+ | qt | GUI | GUI toolkit (only needed when GUI enabled)
+ | libqrencode | QR codes in GUI | Optional for generating QR codes (only needed when GUI enabled) |
+ | univalue | Utility | JSON parsing and encoding (bundled version will be used unless --with-system-univalue passed to configure) |
+ | libzmq3 | ZMQ notification | Optional, allows generating ZMQ notifications (requires ZMQ version >= 4.0.0) |
 
 ## Get started
 1、首先是下载比特币源码：  
