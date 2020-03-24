@@ -214,13 +214,5 @@ $ bitcoin-cli getblockhash 277316
 $ bitcoin-cli getblock 0000000000000001b6b9a13b095e96db41c4a928b97ef2d944a9b31b2cc7bdc4
 ```
 
-## .bitcoin目录分析
-
-
-
-
-
-
-
 ## Other
 如果想继续深入了解比特币的相关知识，那么需要继续深入学习
