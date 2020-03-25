@@ -92,3 +92,16 @@
 表示的是这笔交易存在哪个区块链文件号、保存交易的区块的偏移值、交易在区块中偏移值  
 
 ### 数据访问层
+数据集是通过包装类CBlockTreeDB访问的  
+包装类在一个被称作pblcoktree的全局变量中定义的  
+CBlockIndex  
+存储在数据库中的块在内存中表示为CBlockIndex对象。收到区块头后，首先创建此类型的对象。  
+该代码不会等待接收完整的块，通过网络接收到区块头时，会将它们流式传输到CBlockHeaders的向量中，然后对其进行检查。  
+每个检出的区块头都将导致创建一个新的CBlockIndex，并将其存储到数据库中。  
+CBlock/CBlockHeader  
+CBlock将整个交易保存在区块中，交易数据部分放在两个位置。一个是blk*.dat文件，一个是UTXO数据库。  
+块索引数据库只保存元数据  
+Loading the block database into memory  
+整个数据库在启动时就会加载到内存中。详见LoadBlockIndexGuts（txdb.cpp）。  
+块（“b”键）被加载到全局“mapBlockIndex”变量中。“mapBlockIndex”是一个unordered_map容器，它为整个块树中的每个块保存CBlockIndex，不只是主动链。  
+块文件元数据（“f”键）已加载到vInfoBlockFiles中。  
