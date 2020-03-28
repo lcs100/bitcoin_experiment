@@ -157,3 +157,6 @@ ViewMempool将内存池和视图进行关联
      View/Cache            \
                          Validation cache
 ```
+
+## Raw undo data(rev*.dat)
+这些文件包括了如果把某个区块断开或者回滚时所需要的必要信息，实际上是类CTxOut。  
