@@ -105,3 +105,55 @@ Loading the block database into memory
 整个数据库在启动时就会加载到内存中。详见LoadBlockIndexGuts（txdb.cpp）。  
 块（“b”键）被加载到全局“mapBlockIndex”变量中。“mapBlockIndex”是一个unordered_map容器，它为整个块树中的每个块保存CBlockIndex，不只是主动链。  
 块文件元数据（“f”键）已加载到vInfoBlockFiles中。  
+
+## UTXO set
+UTXO集合也就是链状态leveldb  
+具体定义这里不再阐述  
+看一下levelDB中关于链状态的键值对：  
+```
+'c' + 32-byte transaction hash -> unspent transaction output record for that transaction. These records are only present for transactions that have at least one unspent output left. Each record stores:
+    * The version of the transaction.
+    * Whether the transaction was a coinbase or not.
+    * Which height block contains the transaction.
+    * Which outputs of that transaction are unspent.
+    * The scriptPubKey and amount for those unspent outputs.
+'B' -> 32-byte block hash: the block hash up to which the database represents the unspent transaction outputs.
+```
+'c'+32字节的交易哈希，意思是该交易的未用交易输出记录，这些记录仅适用于至少剩一个未使用输出的交易，包括：  
+1、交易的版本  
+2、交易是否是一个币基交易  
+3、哪一个高度的区块包含了这笔交易  
+4、交易的哪一笔输出还没有被花掉  
+5、交易的哪些输出被花掉  
+6、未使用的输出的scriptPubKey和数量  
+'B'+32字节区块哈希，意思是指数据库代表未完成交易输出的块哈希  
+
+### Data Access Layer and Caching
+有一点需要注意，在本地检索相关交易时，在UTXO数据库中检索的开销会占大多数，而在检索区块索引的开销会比较小  
+如下所示：（但代码实现上看执行不清晰）  
+基本数据结构是CCoins（代表单个交易的代币）和CCoinsView（代表代币数据库的状态）。 CCoinsView有几种实现。 一个虚拟对象，一个由硬币数据库（coins.dat）支持，一个由内存池支持，另一个在其顶部添加缓存。  
+
+视图的类型如下：  
+```
+      CCoinsView (abstract class)
+             /            \
+         ViewDB          ViewBacked 
+      (database)          /      \
+                   ViewMempool   ViewCache
+```
+这里可以看作是将CCoinsViews基类与其子类之间的关系，包括ViewDB，以及ViewBacked，以及子类ViewMempool和ViewCache  
+每一个类有一个主属性：  
+CCoinsView是基类，其作用是验证硬币是否存在以及对硬币进行检索  
+ViewDB具有与LevelDB交互的代码  
+ViewBacked有一个指向另外一个View的指针，因此具有UTXO集合的另一个视图  
+ViewCache具有一个缓存(CCoins的映射)  
+ViewMempool将内存池和视图进行关联  
+
+试图对应的类如下所示：  
+```
+            Database       
+           /       \
+       MemPool     Blockchain cache (pcoinsTip) 
+     View/Cache            \
+                         Validation cache
+```
